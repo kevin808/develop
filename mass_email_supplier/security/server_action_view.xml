@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="email_template_quotation_create" model="email.template">
+            <field name="name">Auto-email when quotation create</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_from">admin@example.com</field>
+            <!-- <field name="email_to">${(object.user_id != False and object.user_id.email)|safe}</field> -->
+            <field name="email_to">",".join(set([i.email for i in object.message_follower_ids]))</field>
+            <field name="subject">Quotation [[object.name]] has been created, you should confirm the inventory</field>
+            <field name="body_html"><![CDATA[THIS IS AN AUTOMATED EMAIL. DO NOT REPLY.
+
+Hello,
+
+We are here to inform you that the quotation [[object.name]] has been created and you should confirm the inventory and confirm the quotation.
+
+If you have any question, do not hesitate to contact your supervisor.
+
+Thank you!]]>
+            </field>
+        </record>
+        <record id="email_template_payment_timeout" model="email.template">
+            <field name="name">Auto-email when payment timeout</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_from">admin@example.com</field>
+            <!-- <field name="email_to">${(object.user_id != False and object.user_id.email)|safe}</field> -->
+            <field name="email_to">",".join(set([i.email for i in object.message_follower_ids]))</field>
+            <field name="subject">Quotation [[object.name]] has been canceled, Because of user didn't payment in 48 hours</field>
+            <field name="body_html"><![CDATA[THIS IS AN AUTOMATED EMAIL. DO NOT REPLY.
+
+Hello,
+
+We are here to inform you that the quotation [[object.name]] has been canceled because of user did't payment in 48 hours.
+
+If you have any question, do not hesitate to contact your supervisor.
+
+Thank you!]]>
+            </field>
+        </record>
+        <record id="email_template_customer_cancel" model="email.template">
+            <field name="name">Auto-email when customer canceled</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_from">admin@example.com</field>
+            <!-- <field name="email_to">${(object.user_id != False and object.user_id.email)|safe}</field> -->
+            <field name="email_to">",".join(set([i.email for i in object.message_follower_ids]))</field>
+            <field name="subject">Sale Order [[object.name]] has been canceled, Because of user canceled manaul in the frontend</field>
+            <field name="body_html"><![CDATA[THIS IS AN AUTOMATED EMAIL. DO NOT REPLY.
+
+Hello,
+
+We are here to inform you that the sale order [[object.name]] has been canceled because of user canceled it in the frontend, you should return the money to lifemall.
+
+If you have any question, do not hesitate to contact your supervisor.
+
+Thank you!]]>
+            </field>
+        </record>
+
+
+        <record id="ir_actions_server_send_email_when_quotation_create" model="ir.actions.server">
+            <field name="name">Auto-email when quotation create</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="condition">object.order_category == '521'</field>
+            <field name="type">ir.actions.server</field>
+            <field name="state">email</field>
+            <field name="template_id" ref="mass_email_supplier.email_template_quotation_create"/>
+        </record>
+        <record id="ir_actions_server_send_email_when_payment_timeout" model="ir.actions.server">
+            <field name="name">Auto-email when payment timeout</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="condition">object.order_category == '521' and object.payment_timeout==True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="state">email</field>
+            <field name="template_id" ref="mass_email_supplier.email_template_payment_timeout"/>
+        </record>
+        <record id="ir_actions_server_send_email_when_customer_cancel" model="ir.actions.server">
+            <field name="name">Auto-email when customer canceled</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="condition">object.order_category == '521' and object.customer_canceled==True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="state">email</field>
+            <field name="template_id" ref="mass_email_supplier.email_template_customer_cancel"/>
+        </record>
+
+    </data>
+</openerp>

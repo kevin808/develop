@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Author: Sébastien BEAU
-#    Copyright 2011-2013 Akretion
+#    Mail Server Smtp User
+#    Copyright 2014 wangbuke <wangbuke@gmail.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,19 +18,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from openerp import tools
-from openerp.osv import osv, fields, expression
-
-class product_template(osv.osv):
-    _name = "product.template"
-    _inherit = 'product.template'
-
-    _columns = {
-        'default_code': fields.related('product_variant_ids', 'default_code', type='char', string='Internal Reference'),
-    }
-
-    _defaults = {
-        'default_code': lambda s,cr,uid,c: s.pool.get('ir.sequence').get(cr, uid, 'product.sequence',context=c), 
-
-    }
+import ir_mail_server

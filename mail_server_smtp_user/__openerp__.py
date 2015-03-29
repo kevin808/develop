@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (c) 2010-2013 Elico Corp. All Rights Reserved.
-#    Qing Wang <wang.qing@elico-corp.com>
+#    Mail Server Smtp User
+#    Copyright 2014 wangbuke <wangbuke@gmail.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,22 +18,33 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 {
-    'name': 'Product SKU in Sequence',
-    'version': '1.0.0',
-    'category': 'Product',
-    'author': 'Elico Corp',
-    'website': 'http://www.elico-corp.com',
-    'summary': '',
+    'name': 'Mail Server Smtp User',
+    'version': '0.1',
+    'category': 'Social Network',
     'description': """
-        Custom SKU for Lifemall
-        """,
-    'sequence': 10,
+
+Fixed email from header.
+
+功能：修复OE 邮件头From 格式错误。
+
+默认情况下，QQ 邮箱等将返回发送地址和帐号必须相同, 本模块修复以上问题。
+
+
+如果您觉得好用，请进入下面的网址，付费支持作者 ~
+
+http://me.alipay.com/wangbuke
+
+谢谢！
+
+""",
+    'author': 'wangbuke@gmail.com',
+    'website': 'http://buke.github.io',
+    'depends': ['base'],
     'data': [
-        'views/template.xml',
     ],
-    'test': [],
     'installable': True,
-    'application': False,
+    'images': [],
 }
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

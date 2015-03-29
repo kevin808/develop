@@ -3,7 +3,7 @@
 #
 #    OpenERP, Open Source Management Solution
 #    Copyright (c) 2010-2013 Elico Corp. All Rights Reserved.
-#    Augustin Cisterne-Kaas <augustin.cisterne-kaaas@elico-corp.com>
+#    Kevin Lee <kevin.lee@elico-corp.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,18 +19,27 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+
 {
-    'name': 'OpenERP Adblock',
-    'version': '0.1',
-    'category': '',
-    'depends': ['mail'],
+    'name': 'Automatically send Email to vendors',
+    'version': '1.0.0',
+    'category': 'Product',
     'author': 'Elico Corp',
-    'license': 'AGPL-3',
-    'website': 'https://www.elico-corp.com',
+    'website': 'http://www.elico-corp.com',
+    'summary': '',
     'description': """
-        Module which hides the OpenERP announcement bar.
-    """,
-    'data': ['views/web_adblock.xml'],
+        Automatically send Email to vendor for the canceled order,
+        Automatically send email to vendor for confirmed quotation
+        """,
+    'sequence': 10,
+    'depends': [
+        'base_setup',
+        'mail',
+        'email_template'],
+    'data': [
+        'security/server_action_view.xml',
+    ],
+    'test': [],
     'installable': True,
     'application': False,
 }
