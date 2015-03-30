@@ -63,7 +63,7 @@ Thank you!]]>
         <record id="ir_actions_server_send_email_when_quotation_create" model="ir.actions.server">
             <field name="name">Auto-email when quotation create</field>
             <field name="model_id" ref="sale.model_sale_order"/>
-            <field name="condition">object.order_category == '521'</field>
+            <field name="condition">True</field>
             <field name="type">ir.actions.server</field>
             <field name="state">email</field>
             <field name="template_id" ref="mass_email_supplier.email_template_quotation_create"/>
@@ -71,7 +71,7 @@ Thank you!]]>
         <record id="ir_actions_server_send_email_when_payment_timeout" model="ir.actions.server">
             <field name="name">Auto-email when payment timeout</field>
             <field name="model_id" ref="sale.model_sale_order"/>
-            <field name="condition">object.order_category == '521' and object.payment_timeout==True</field>
+            <field name="condition">True</field>
             <field name="type">ir.actions.server</field>
             <field name="state">email</field>
             <field name="template_id" ref="mass_email_supplier.email_template_payment_timeout"/>
@@ -79,7 +79,7 @@ Thank you!]]>
         <record id="ir_actions_server_send_email_when_customer_cancel" model="ir.actions.server">
             <field name="name">Auto-email when customer canceled</field>
             <field name="model_id" ref="sale.model_sale_order"/>
-            <field name="condition">object.order_category == '521' and object.customer_canceled==True</field>
+            <field name="condition">True</field>
             <field name="type">ir.actions.server</field>
             <field name="state">email</field>
             <field name="template_id" ref="mass_email_supplier.email_template_customer_cancel"/>

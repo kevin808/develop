@@ -32,37 +32,6 @@ from openerp.http import request
 
 _logger = logging.getLogger(__name__)
 
-# ORDER_STATUS_MAPPING = {
-#     'canceled': 'cancel',
-#    }
-TRANSPORT_COMPANY_CARRIER_CODE_MAPPING = {
-    'tablerate_bestway': 'EMS'
-}
-
-
-# 全球采购商品/定价商品  521
-# 食品    522
-# 定制商品  523
-
-MAGENTO_WKF_CAGETORY = {
-    '522': 'food',
-    '523': 'customized',
-    '521': 'gloable_priced',
-}
-# @magento_lifemall
-# class LMSaleOrderImport(SaleOrderImport):
-
-class sale_order(osv.osv):
-    _inherit = "sale.order"
-    _columns = {
-        'order_category': fields.selection([('522', 'food'),
-                                            ('523', 'customized'),
-                                            ('521', 'gloable_priced'),
-                                            ],
-                                           'Order Category'),
-    }
-
-
 class mass_mail_supplier(osv.osv):
     _name = 'mass.mail.supplier'
     def send_email_to_supplier(self, order_id, email_template, context=None):
