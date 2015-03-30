@@ -27,6 +27,7 @@ from openerp import netsvc
 import xmlrpclib
 from openerp.tools.translate import _
 from openerp.http import request
+# from .event import on_sale_state_change
 
 
 _logger = logging.getLogger(__name__)
@@ -50,7 +51,20 @@ MAGENTO_WKF_CAGETORY = {
 }
 # @magento_lifemall
 # class LMSaleOrderImport(SaleOrderImport):
-class mass_mail_supplier:
+
+class sale_order(osv.osv):
+    _inherit = "sale.order"
+    _columns = {
+        'order_category': fields.selection([('522', 'food'),
+                                            ('523', 'customized'),
+                                            ('521', 'gloable_priced'),
+                                            ],
+                                           'Order Category'),
+    }
+
+
+class mass_mail_supplier(osv.osv):
+    _name = 'mass.mail.supplier'
     def send_email_to_supplier(self, order_id, email_template, context=None):
         if context is None:
             context = {'active_model': 'sale.order', 'active_id': order_id}

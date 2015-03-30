@@ -3,7 +3,7 @@
     <data>
         <record id="email_template_quotation_create" model="email.template">
             <field name="name">Auto-email when quotation create</field>
-            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="model_id" ref="sale.model_sale_order"/>
             <field name="auto_delete" eval="True"/>
             <field name="email_from">admin@example.com</field>
             <!-- <field name="email_to">${(object.user_id != False and object.user_id.email)|safe}</field> -->
@@ -22,7 +22,7 @@ Thank you!]]>
         </record>
         <record id="email_template_payment_timeout" model="email.template">
             <field name="name">Auto-email when payment timeout</field>
-            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="model_id" ref="sale.model_sale_order"/>
             <field name="auto_delete" eval="True"/>
             <field name="email_from">admin@example.com</field>
             <!-- <field name="email_to">${(object.user_id != False and object.user_id.email)|safe}</field> -->
@@ -41,7 +41,7 @@ Thank you!]]>
         </record>
         <record id="email_template_customer_cancel" model="email.template">
             <field name="name">Auto-email when customer canceled</field>
-            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="model_id" ref="sale.model_sale_order"/>
             <field name="auto_delete" eval="True"/>
             <field name="email_from">admin@example.com</field>
             <!-- <field name="email_to">${(object.user_id != False and object.user_id.email)|safe}</field> -->
@@ -62,7 +62,7 @@ Thank you!]]>
 
         <record id="ir_actions_server_send_email_when_quotation_create" model="ir.actions.server">
             <field name="name">Auto-email when quotation create</field>
-            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="model_id" ref="sale.model_sale_order"/>
             <field name="condition">object.order_category == '521'</field>
             <field name="type">ir.actions.server</field>
             <field name="state">email</field>
@@ -70,7 +70,7 @@ Thank you!]]>
         </record>
         <record id="ir_actions_server_send_email_when_payment_timeout" model="ir.actions.server">
             <field name="name">Auto-email when payment timeout</field>
-            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="model_id" ref="sale.model_sale_order"/>
             <field name="condition">object.order_category == '521' and object.payment_timeout==True</field>
             <field name="type">ir.actions.server</field>
             <field name="state">email</field>
@@ -78,7 +78,7 @@ Thank you!]]>
         </record>
         <record id="ir_actions_server_send_email_when_customer_cancel" model="ir.actions.server">
             <field name="name">Auto-email when customer canceled</field>
-            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="model_id" ref="sale.model_sale_order"/>
             <field name="condition">object.order_category == '521' and object.customer_canceled==True</field>
             <field name="type">ir.actions.server</field>
             <field name="state">email</field>

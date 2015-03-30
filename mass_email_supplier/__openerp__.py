@@ -35,7 +35,8 @@
     'depends': [
         'base_setup',
         'mail',
-        'email_template'],
+        'email_template',
+        'sale'],
     'data': [
         'security/server_action_view.xml',
     ],
