@@ -6,14 +6,14 @@
             <field name="model_id" ref="sale.model_sale_order"/>
             <field name="auto_delete" eval="True"/>
             <field name="email_from">admin@example.com</field>
-            <!-- <field name="email_to">${(object.user_id != False and object.user_id.email)|safe}</field> -->
-            <field name="email_to">",".join(set([i.email for i in object.message_follower_ids]))</field>
-            <field name="subject">Quotation [[object.name]] has been created, you should confirm the inventory</field>
+            <field name="email_to"></field>
+            <field name="partner_to">${object.partner_id != False and object.partner_id.id}</field>
+            <field name="subject">Quotation ${object.name} has been created, you should confirm the inventory</field>
             <field name="body_html"><![CDATA[THIS IS AN AUTOMATED EMAIL. DO NOT REPLY.
 
 Hello,
 
-We are here to inform you that the quotation [[object.name]] has been created and you should confirm the inventory and confirm the quotation.
+We are here to inform you that the quotation ${object.name} has been created and you should confirm the inventory and confirm the quotation.
 
 If you have any question, do not hesitate to contact your supervisor.
 
@@ -25,14 +25,14 @@ Thank you!]]>
             <field name="model_id" ref="sale.model_sale_order"/>
             <field name="auto_delete" eval="True"/>
             <field name="email_from">admin@example.com</field>
-            <!-- <field name="email_to">${(object.user_id != False and object.user_id.email)|safe}</field> -->
-            <field name="email_to">",".join(set([i.email for i in object.message_follower_ids]))</field>
-            <field name="subject">Quotation [[object.name]] has been canceled, Because of user didn't payment in 48 hours</field>
+            <field name="email_to"></field>
+            <field name="partner_to">${object.partner_id != False and object.partner_id.id}</field>
+            <field name="subject">Quotation ${object.name} has been canceled, Because of user didn't payment in 48 hours</field>
             <field name="body_html"><![CDATA[THIS IS AN AUTOMATED EMAIL. DO NOT REPLY.
 
 Hello,
 
-We are here to inform you that the quotation [[object.name]] has been canceled because of user did't payment in 48 hours.
+We are here to inform you that the quotation ${object.name} has been canceled because of user did't payment in 48 hours.
 
 If you have any question, do not hesitate to contact your supervisor.
 
@@ -44,14 +44,14 @@ Thank you!]]>
             <field name="model_id" ref="sale.model_sale_order"/>
             <field name="auto_delete" eval="True"/>
             <field name="email_from">admin@example.com</field>
-            <!-- <field name="email_to">${(object.user_id != False and object.user_id.email)|safe}</field> -->
-            <field name="email_to">",".join(set([i.email for i in object.message_follower_ids]))</field>
-            <field name="subject">Sale Order [[object.name]] has been canceled, Because of user canceled manaul in the frontend</field>
+            <field name="partner_to">${object.partner_id != False and object.partner_id.id}</field>
+            <field name="email_to"></field>
+            <field name="subject">Sale Order ${object.name} has been canceled, Because of user canceled manaul in the frontend</field>
             <field name="body_html"><![CDATA[THIS IS AN AUTOMATED EMAIL. DO NOT REPLY.
 
 Hello,
 
-We are here to inform you that the sale order [[object.name]] has been canceled because of user canceled it in the frontend, you should return the money to lifemall.
+We are here to inform you that the sale order ${object.name} has been canceled because of user canceled it in the frontend, you should return the money to lifemall.
 
 If you have any question, do not hesitate to contact your supervisor.
 
