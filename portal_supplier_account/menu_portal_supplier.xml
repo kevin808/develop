@@ -1,16 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+        <menuitem name="Portal"
+            id="portal.portal_menu"
+            groups="base.group_portal,base.group_public,res_portal_supplier_account"
+            sequence="15"/>
+        <!-- <menuitem name="Messaging" id="portal.portal_messages" parent="portal.portal_menu" sequence="10" groups="portal.group_portal,res_portal_supplier_account"/>
+        <menuitem name="Inbox" id="portal.portal_inbox" parent="portal.portal_messages"
+            action="portal.action_mail_inbox_feeds_portal" sequence="10" groups="portal.group_portal,res_portal_supplier_account"/>
+        <menuitem name="Archives" id="portal.portal_mail_archivesfeeds" parent="portal.portal_messages"
+            action="portal.action_mail_archives_feeds_portal" sequence="30" groups="portal.group_portal,res_portal_supplier_account"/>
+        <menuitem name="To-do" id="portal.portal_mail_starfeeds" parent="portal.portal_messages"
+            action="portal.action_mail_star_feeds_portal" sequence="20" groups="base.group_no_one,res_portal_supplier_account"/> -->
+
+        <!-- portal warehouse -->
+        <menuitem name="Warehouse"
+            id="portal_supplier_account.menu_portal_warehouse_root"
+            groups="res_portal_supplier_account"
+            sequence="90"/>
+
+        <!-- portal warehouse -->
+        <menuitem id="portal_supplier_account.menu_portal_warehouse_management" name="Portal Warehouse" parent="portal_supplier_account.menu_portal_warehouse_root" sequence="1" groups="res_portal_supplier_account"/>
+
+        <!-- portal supplier Delivery Orders -->
+        <menuitem name="Deliery Orders" id="portal_supplier_account.menu_portal_delivery_order" parent="portal_supplier_account.menu_portal_warehouse_management"
+        action="stock.action_picking_tree"
+        groups="res_portal_supplier_account"/>
 
         <record id="stock.action_picking_tree" model="ir.actions.act_window">
             <field name="name">Delivery Orders</field>
-            <field name="res_model">stock.picking.out</field>
+            <field name="res_model">stock.picking</field>
             <field name="type">ir.actions.act_window</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,calendar</field>
             <field name="domain">[('type','=','out')]</field>
             <field name="context">{'default_type': 'out', 'contact_display': 'partner_address'}</field>
-            <field name="search_view_id" ref="stock.view_picking_out_search"/>
+            <field name="search_view_id" ref="stock.view_picking_internal_search"/>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
                 Click to create a delivery order. 
@@ -57,6 +82,61 @@
             </field>
         </record>
 
+
+        <record id="product_template_kanban_view" model="ir.ui.view">
+            <field name="name">Product.template.product.kanban</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="image_small"/>
+                    <field name="lst_price"/>
+                    <field name="is_product_variant"/>
+                    <field name="product_variant_count"/>
+                    <field name="product_variant_ids"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_vignette oe_semantic_html_override">
+                                <a type="open"><img t-att-src="kanban_image('product.template', 'image_small', record.id.value)" class="oe_kanban_image"/></a>
+                                <div class="oe_kanban_details">
+                                    <h4>
+                                        <a type="open">
+                                             <field name="name"/> 
+                                        </a>
+                                    </h4>
+                                    <a name="%(product_extension.product_variant_action)d" type="action">
+                                        <t t-esc="record.product_variant_count.value"/> Variants
+                                    </a>
+                                    <div name="tags"/>
+                                    <ul>
+                                        <li>Price: <field name="lst_price"></field></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+
+
+
+
+        <!--inherit product kanban wiew-->
+        <record id="product_kanban_view" model="ir.ui.view">
+            <field name="name">Product Kanban</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_kanban_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="attribute_value_ids"/>
+                </field>
+            </field>
+        </record>
+
+
+
         <record id="open_view_product_form1_protal" model="ir.actions.act_window.view">
             <field name="sequence" eval="3"/>
             <field name="view_mode">form</field>
@@ -71,14 +151,157 @@
             <field name="act_window_id" ref="product_normal_action_puchased_portal"/>
         </record>
 
+        <record id="product_template_action" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="product_template_kanban_view"/>
+            <field name="context">{"search_default_filter_to_sell":1}</field>
+        </record>
+
+        <record id="open_view_product_template_kanban" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="product_template_kanban_view"/>
+            <field name="act_window_id" ref="product_template_action"/>
+        </record>
+
+
+        <!-- variants -->
+        <record id="variants_template_tree_view" model="ir.ui.view">
+            <field name="name">variants.template.tree</field>
+            <field name="model">product.attribute.value</field>
+            <field name="arch" type="xml">
+                <tree string="Variant Values" editable="top">
+                    <field name="sequence" widget="handle"/>
+                    <field name="attribute_id"/>
+                    <field name="name"/>
+                    <field name="price_extra"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="variants_template_action" model="ir.actions.act_window">
+            <field name="name">Variant Values</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.attribute.value</field>
+            <field name="view_mode">tree</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="variants_template_tree_view"/>
+            <field name="domain">[('product_ids.product_tmpl_id', '=', active_id)]</field>
+            <field name="context">{'default_product_tmpl_id': active_id}</field>
+        </record>
+
+
+
+        <!-- view specific to product.template -->
+        <record id="product_template_only_form_view" model="ir.ui.view">
+            <field name="name">product.template.product.form</field>
+            <field name="model">product.template</field>
+            <field name="priority" eval="8" />
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="attributes">
+                    <attribute name="name">Product Template</attribute>
+                </xpath>
+                <field name="active" position="after">
+                    <field name="ean13" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
+                    <field name="default_code" attrs="{'invisible': [('product_variant_count', '>', 1)]}"/>
+                </field>
+                <xpath expr="//page[@string='Sales']" position="after">
+                    <page name="variants" string="Variants">
+                        <div class="oe_right">
+                            <button class="oe_inline" string="Variant Prices"  name="%(variants_template_action)d" type="action"/>
+                            <button class="oe_inline" name="%(product_extension.product_variant_action)d" type="action" string="List of Variants">
+                                <field string="List of Variants" name="product_variant_count" widget="statinfo" />
+                            </button>
+                        </div>
+                        <field name="attribute_line_ids" widget="one2many_list" context="{'show_attribute': False}">
+                            <tree string="Variants" editable="bottom">
+                                <field name="attribute_id"/>
+                                <field name="value_ids" widget="many2many_tags" options="{'no_create_edit': True}" domain="[('attribute_id', '=', attribute_id)]" context="{'default_attribute_id': attribute_id}"/>
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+
+        <record id="open_view_product_template_form" model="ir.actions.act_window.view">
+            <field name="sequence" eval="3"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="product_template_only_form_view"/>
+            <field name="act_window_id" ref="product_template_action"/>
+        </record>
+
+
+        <record id="product.product_template_tree_view" model="ir.ui.view">
+            <field name="name">product.template.product.tree</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <tree string="Product">
+                    <field name="name"/>
+                    <field name="categ_id"/>
+                    <field name="type"/>
+                    <field name="state"/>
+                    <field name="uom_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="open_view_product_template_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="product.product_template_tree_view"/>
+            <field name="act_window_id" ref="product_template_action"/>
+        </record>
+
+        <menuitem action="product_template_action"
+            id="menu_product_template_action"
+            parent="base.menu_product" sequence="1" />
+
+
+        <record id="product.product_normal_action_sell" model="ir.actions.act_window">
+            <field name="name">Product Variants</field>
+        </record>
+
+        <record id="product.open_view_product_kanban1" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="product_kanban_view"/>
+            <field name="act_window_id" ref="product.product_normal_action_sell"/>
+        </record>
+
+        <record id="product.open_view_product_form1" model="ir.actions.act_window.view">
+            <field name="sequence" eval="3"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="product.product_normal_form_view"/>
+            <field name="act_window_id" ref="product.product_normal_action_sell"/>
+        </record>
+
+        <record id="product.open_view_product_tree1" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="product.product_product_tree_view"/>
+            <field name="act_window_id" ref="product.product_normal_action_sell"/>
+        </record>
+
+        <menuitem action="product.product_normal_action_sell" id="product.menu_products" parent="base.menu_product" sequence="9"/>
+
         <!-- portal products -->
-        <menuitem id="menu_portal_product" name="Products" parent="portal.portal_orders" action="product_extension.product_template_action" sequence="8"/>
+        <menuitem id="menu_portal_product" name="Products" parent="portal.portal_orders" action="product_template_action" sequence="8"/>
 
         <menuitem id="menu_portal_product_variant" name="Product Variants" parent="portal.portal_orders" action="product.product_normal_action_sell" sequence="8"/>
 
         <!-- portal supplier -->
         <menuitem id="menu_portal_supplier_name" name="Portal Suppliers"
-        parent="portal.portal_company"
+        parent="portal.portal_menu"
         groups="res_portal_supplier_account"
         action="action_portal_partner_supplier_form" sequence="1"/>
 
@@ -114,36 +337,8 @@
             <field name="help">We haven't sent you any sales order.</field>
         </record>
 
-
-
         <menuitem name="Configuration" id="menu_protal_config" parent="portal.portal_menu"/>
         <menuitem id="menu_portal_product_config" name="Product Attribute" parent="menu_protal_config" action="product_extension.attribute_action" sequence="12" groups="res_portal_supplier_account"/>
         <menuitem id="menu_portal_product_attribute_value" name="Product Attribute Values" parent="menu_protal_config" action="product_extension.variants_action" sequence="13" groups="res_portal_supplier_account"/>
-        <menuitem name="Portal"
-            id="portal.portal_menu"
-            groups="portal.group_portal,portal.group_anonymous,res_portal_supplier_account"
-            sequence="15"/>
-        <!-- <menuitem name="Messaging" id="portal.portal_messages" parent="portal.portal_menu" sequence="10" groups="portal.group_portal,res_portal_supplier_account"/>
-        <menuitem name="Inbox" id="portal.portal_inbox" parent="portal.portal_messages"
-            action="portal.action_mail_inbox_feeds_portal" sequence="10" groups="portal.group_portal,res_portal_supplier_account"/>
-        <menuitem name="Archives" id="portal.portal_mail_archivesfeeds" parent="portal.portal_messages"
-            action="portal.action_mail_archives_feeds_portal" sequence="30" groups="portal.group_portal,res_portal_supplier_account"/>
-        <menuitem name="To-do" id="portal.portal_mail_starfeeds" parent="portal.portal_messages"
-            action="portal.action_mail_star_feeds_portal" sequence="20" groups="base.group_no_one,res_portal_supplier_account"/> -->
-
-        <!-- portal warehouse -->
-        <menuitem name="Warehouse"
-            id="portal_supplier_account.menu_portal_warehouse_root"
-            groups="res_portal_supplier_account"
-            sequence="90"/>
-
-        <!-- portal warehouse -->
-        <menuitem id="portal_supplier_account.menu_portal_warehouse_management" name="Portal Warehouse" parent="portal_supplier_account.menu_portal_warehouse_root" sequence="1" groups="res_portal_supplier_account"/>
-
-        <!-- portal supplier Delivery Orders -->
-        <menuitem name="Deliery Orders" id="portal_supplier_account.menu_portal_delivery_order" parent="portal_supplier_account.menu_portal_warehouse_management"
-        action="stock.action_picking_tree"
-        groups="res_portal_supplier_account"/>
-
     </data>
 </openerp>

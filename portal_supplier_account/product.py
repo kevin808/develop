@@ -25,16 +25,24 @@ from openerp.osv import orm, fields
 class product_product(orm.Model):
     _inherit = 'product.product'
 
+    _columns = {
+        'supplier_stock_count': fields.integer('Stock Count'),
+        'is_imported': fields.boolean('Is Imported'),
+        'special_price': fields.float('Special Price', required=True),
+        'special_price_from_date': fields.date('Special Price From Date'),
+        'special_price_to_date': fields.date('Special Price To Date'),
+        'sequence': fields.integer(
+            'Sequence', help="Determine the display order"),
+        'sku': fields.char('sku', required=True),
+    }
+
     _defaults = {
         'procure_method': 'make_to_order',
         'supply_method': 'buy',
         'type': 'product',
+        'is_imported': False,
+        'categ_id': False,
     }
-
-    _columns = {
-        'supplier_stock_count': fields.integer('Stock Count'),
-    }
-
 
 class ProductTemplate(orm.Model):
     _inherit = 'product.template'

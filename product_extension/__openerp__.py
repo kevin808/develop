@@ -3,7 +3,7 @@
 #
 #    OpenERP, Open Source Management Solution
 #    Copyright (c) 2010-2014 Elico Corp. All Rights Reserved.
-#    Bob Luo <luo.yumeng@elico-corp.com>
+#    Qing Wang <wang.qing@elico-corp.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,39 +19,27 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-    'name': 'Portal Supplier Account',
-    'version': '1.0',
-    'category': '',
-    'summary': '',
-    'description': """
-Portal Supplier Management.
-====================================
+{'name': 'Product Extension',
+ 'version': '0.1',
+ 'category': '',
+ 'depends': [
+    'sale',
+    'product',
+    'stock',
+    # 'magentoerpconnect_catalog_attributes'
+],
+ 'author': 'Elico Corp',
+ 'license': 'AGPL-3',
+ 'website': 'https://www.elico-corp.com',
+ 'description': """
 
-New gorup: Portal Supplier Account
---------------------------------------------
-    * manage own products
-    * modify own profile data
-    """,
-    'author': 'OpenERP SA',
-    'website': 'http://www.openerp.com',
-    'images': [],
-    'depends': [
-        'portal',
-        'portal_sale',
-        'product',
-        'product_variant_multi',
-        'product_extension',
-        # 'product_margin'
-    ],
-    'data': [
-        'wizard/change_supplier_qty.xml',
-        'product_view.xml',
-        'res_partner_view.xml',
-        'group_portal_supplier.xml',
-        'menu_portal_supplier.xml',
-        'security/ir.model.access.csv',
-        'security/supplier_portal_account.xml',
-    ],
-    'installable': True,
+""",
+ 'images': [],
+ 'demo': [],
+ 'data': [
+    'product_view.xml',
+    'stock_product_view.xml',
+],
+ 'installable': True,
+ 'application': False,
 }
